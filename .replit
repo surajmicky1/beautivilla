@@ -3,6 +3,26 @@ run = "npm run dev"
 
 [nix]
 channel = "stable-24_05"
+packages = ["lsof"]
 
 [deployment]
 run = ["sh", "-c", "npm run dev"]
+
+[workflows]
+
+[[workflows.workflow]]
+name = "Dev"
+author = 42814515
+mode = "parallel"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd server && npm run dev"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd client && npm run dev"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
