@@ -9,6 +9,7 @@ packages = ["lsof"]
 run = ["sh", "-c", "npm run dev"]
 
 [workflows]
+runButton = "Dev"
 
 [[workflows.workflow]]
 name = "Dev"
@@ -18,10 +19,6 @@ mode = "parallel"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd server && npm run dev"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd client && npm run dev"
 
 [[ports]]
 localPort = 5000
