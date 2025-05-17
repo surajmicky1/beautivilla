@@ -40,8 +40,13 @@ const RegisterForm = () => {
       setIsPending(true);
       await register(data.name, data.email, data.password);
       // Registration successful, auth context will handle redirect
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration error:", error);
+      // Show form error
+      form.setError("email", { 
+        type: "manual", 
+        message: error.message || "Registration failed. This email may already be in use." 
+      });
     } finally {
       setIsPending(false);
     }

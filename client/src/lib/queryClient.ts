@@ -1,76 +1,47 @@
-import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 
-async function throwIfResNotOk(res: Response) {
-  if (!res.ok) {
-    const text = (await res.text()) || res.statusText;
-    throw new Error(`${res.status}: ${text}`);
-  }
-}
+// Create a client
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+});
 
-export async function apiRequest(
+// Helper function for API requests
+export const apiRequest = async (
   method: string,
-  url: string,
-  data?: unknown | undefined,
-): Promise<Response> {
-  // Add auth token to headers if available
-  const token = localStorage.getItem("token");
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json"
+  endpoint: string,
+  data?: any,
+  token?: string | null
+) => {
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
   };
-  
+
   if (token) {
     headers["x-auth-token"] = token;
   }
 
-  const res = await fetch(url, {
+  const config: RequestInit = {
     method,
     headers,
-    body: data ? JSON.stringify(data) : undefined,
     credentials: "include",
-  });
-
-  await throwIfResNotOk(res);
-  return res;
-}
-
-type UnauthorizedBehavior = "returnNull" | "throw";
-export const getQueryFn: <T>(options: {
-  on401: UnauthorizedBehavior;
-}) => QueryFunction<T> =
-  ({ on401: unauthorizedBehavior }) =>
-  async ({ queryKey }) => {
-    // Add auth token to headers if available
-    const token = localStorage.getItem("token");
-    const headers: Record<string, string> = {};
-    
-    if (token) {
-      headers["x-auth-token"] = token;
-    }
-
-    const res = await fetch(queryKey[0] as string, {
-      headers,
-      credentials: "include",
-    });
-
-    if (unauthorizedBehavior === "returnNull" && res.status === 401) {
-      return null;
-    }
-
-    await throwIfResNotOk(res);
-    return await res.json();
   };
 
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      queryFn: getQueryFn({ on401: "throw" }),
-      refetchInterval: false,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
-    },
-    mutations: {
-      retry: false,
-    },
-  },
-});
+  if (data && (method === "POST" || method === "PUT" || method === "PATCH")) {
+    config.body = JSON.stringify(data);
+  }
+
+  // Get the server URL from the current origin or use default
+  const serverUrl = import.meta.env.DEV 
+    ? "http://localhost:5000" 
+    : window.location.origin;
+
+  const url = `${serverUrl}${endpoint}`;
+  console.log(`Making API request to: ${url}`);
+
+  return fetch(url, config);
+};

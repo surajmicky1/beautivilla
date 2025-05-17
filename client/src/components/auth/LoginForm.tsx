@@ -34,8 +34,13 @@ const LoginForm = () => {
       setIsPending(true);
       await login(data.email, data.password);
       // Login successful, auth context will handle redirect
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login error:", error);
+      // Show form error
+      form.setError("email", { 
+        type: "manual", 
+        message: error.message || "Login failed. Please check your credentials." 
+      });
     } finally {
       setIsPending(false);
     }

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest } from "./queryClient";
 import { useToast } from "../hooks/use-toast";
+import { useLocation } from "wouter";
 
 // Auth types
 interface User {
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [user, setUser] = useState<User | null>(null);
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   // Check if user is authenticated by querying the current user
   const { data, isLoading, refetch } = useQuery({
@@ -106,6 +108,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         title: "Login successful",
         description: `Welcome back, ${data.user.name}!`,
       });
+      // Redirect to dashboard based on user role
+      const dashboardPath = data.user.role === 'admin' ? '/admin' : '/user';
+      setLocation(dashboardPath);
     },
     onError: (error: any) => {
       toast({
@@ -130,6 +135,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         title: "Registration successful",
         description: `Welcome, ${data.user.name}!`,
       });
+      // Redirect to user dashboard after registration
+      setLocation('/user');
     },
     onError: (error: any) => {
       toast({
