@@ -33,12 +33,12 @@ const LoginForm = () => {
     try {
       console.log("Login form submitted with:", data);
       setIsPending(true);
-      
+
       // Debug the form submission process
       console.log("Before login API call");
       const result = await login(data.email, data.password);
       console.log("After login API call, result:", result);
-      
+
       // Login successful, auth context will handle redirect
     } catch (error: any) {
       console.error("Login error:", error);
@@ -59,7 +59,7 @@ const LoginForm = () => {
           <h2 className="text-2xl font-display font-bold">Welcome Back</h2>
           <p className="text-neutral-medium mt-1">Login to your Beauty Villa account</p>
         </div>
-        
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             {form.formState.errors.root && (
@@ -85,7 +85,7 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="password"
@@ -105,13 +105,13 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-            
+
             <div className="flex justify-end mt-2">
               <Link href="#" className="text-sm text-accent hover:text-accent-dark">
                 Forgot Password?
               </Link>
             </div>
-            
+
             <Button 
               type="submit" 
               className="w-full bg-accent hover:bg-accent-dark text-white py-2 rounded-md font-medium transition duration-300"
@@ -128,7 +128,7 @@ const LoginForm = () => {
             </Button>
           </form>
         </Form>
-        
+
         <div className="mt-6 text-center">
           <p className="text-neutral-medium">
             Don't have an account?{" "}

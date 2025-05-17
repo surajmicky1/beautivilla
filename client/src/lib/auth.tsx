@@ -94,9 +94,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         
         // Debug entire fetch process
         console.log("Making API request to /api/auth/login");
-        const response = await apiRequest("POST", "auth/login", credentials);
-        console.log("Login response received:", response);
-        console.log("Login response status:", response.status);
+        try {
+          const response = await apiRequest("POST", "/auth/login", credentials);
+          console.log("Login response received:", response);
+          console.log("Login response status:", response.status);
+        } catch (error) {
+          console.error("Login error:", error);
+          throw error;
+        }
         
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
