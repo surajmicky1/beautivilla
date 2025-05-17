@@ -91,7 +91,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     mutationFn: async (credentials: { email: string; password: string }) => {
       try {
         console.log("Attempting login with:", credentials.email);
+        
+        // Debug entire fetch process
+        console.log("Making API request to /api/auth/login");
         const response = await apiRequest("POST", "/api/auth/login", credentials);
+        console.log("Login response received:", response);
         console.log("Login response status:", response.status);
         
         if (!response.ok) {
@@ -101,7 +105,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         
         const data = await response.json();
-        console.log("Login successful for:", credentials.email);
+        console.log("Login successful for:", credentials.email, data);
         return data;
       } catch (error: any) {
         console.error("Login error:", error);
@@ -134,7 +138,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     mutationFn: async (userData: { name: string; email: string; password: string }) => {
       try {
         console.log("Attempting registration for:", userData.email);
+        
+        // Debug entire fetch process
+        console.log("Making API request to /api/auth/register");
         const response = await apiRequest("POST", "/api/auth/register", userData);
+        console.log("Register response received:", response);
         console.log("Register response status:", response.status);
         
         if (!response.ok) {
@@ -144,7 +152,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         
         const data = await response.json();
-        console.log("Registration successful for:", userData.email);
+        console.log("Registration successful for:", userData.email, data);
         return data;
       } catch (error: any) {
         console.error("Registration error:", error);

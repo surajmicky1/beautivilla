@@ -39,7 +39,12 @@ const RegisterForm = () => {
     try {
       console.log("Register form submitted with:", data);
       setIsPending(true);
-      await register(data.name, data.email, data.password);
+      
+      // Debug the form submission process
+      console.log("Before register API call");
+      const result = await register(data.name, data.email, data.password);
+      console.log("After register API call, result:", result);
+      
       // Registration successful, auth context will handle redirect
     } catch (error: any) {
       console.error("Registration error:", error);

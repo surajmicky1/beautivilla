@@ -36,13 +36,20 @@ export const apiRequest = async (
 
   if (data && (method === "POST" || method === "PUT" || method === "PATCH")) {
     config.body = JSON.stringify(data);
+    console.log(`Request body: ${config.body}`);
   }
 
-  // Get the server URL from the current window location
-  const serverUrl = window.location.origin;
-  
-  const url = `${serverUrl}${endpoint}`;
-  console.log(`Making API request to: ${url}`);
+  // API requests should go directly to the endpoints
+  const url = `${endpoint}`;
+  console.log(`Making API request to: ${url} with method: ${method}`);
+  console.log(`Request config:`, config);
 
-  return fetch(url, config);
+  try {
+    const response = await fetch(url, config);
+    console.log(`Response status: ${response.status}`);
+    return response;
+  } catch (error) {
+    console.error(`API request error for ${url}:`, error);
+    throw error;
+  }
 };

@@ -33,7 +33,12 @@ const LoginForm = () => {
     try {
       console.log("Login form submitted with:", data);
       setIsPending(true);
-      await login(data.email, data.password);
+      
+      // Debug the form submission process
+      console.log("Before login API call");
+      const result = await login(data.email, data.password);
+      console.log("After login API call, result:", result);
+      
       // Login successful, auth context will handle redirect
     } catch (error: any) {
       console.error("Login error:", error);
