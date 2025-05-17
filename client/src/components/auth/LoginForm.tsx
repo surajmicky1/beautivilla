@@ -31,13 +31,14 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
+      console.log("Login form submitted with:", data);
       setIsPending(true);
       await login(data.email, data.password);
       // Login successful, auth context will handle redirect
     } catch (error: any) {
       console.error("Login error:", error);
       // Show form error
-      form.setError("email", { 
+      form.setError("root", { 
         type: "manual", 
         message: error.message || "Login failed. Please check your credentials." 
       });
@@ -56,6 +57,11 @@ const LoginForm = () => {
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {form.formState.errors.root && (
+              <div className="p-3 text-sm bg-red-50 border border-red-200 text-red-600 rounded-md">
+                {form.formState.errors.root.message}
+              </div>
+            )}
             <FormField
               control={form.control}
               name="email"

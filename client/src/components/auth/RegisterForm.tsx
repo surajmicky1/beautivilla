@@ -37,13 +37,14 @@ const RegisterForm = () => {
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
+      console.log("Register form submitted with:", data);
       setIsPending(true);
       await register(data.name, data.email, data.password);
       // Registration successful, auth context will handle redirect
     } catch (error: any) {
       console.error("Registration error:", error);
       // Show form error
-      form.setError("email", { 
+      form.setError("root", { 
         type: "manual", 
         message: error.message || "Registration failed. This email may already be in use." 
       });
@@ -62,6 +63,11 @@ const RegisterForm = () => {
         
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {form.formState.errors.root && (
+              <div className="p-3 text-sm bg-red-50 border border-red-200 text-red-600 rounded-md">
+                {form.formState.errors.root.message}
+              </div>
+            )}
             <FormField
               control={form.control}
               name="name"

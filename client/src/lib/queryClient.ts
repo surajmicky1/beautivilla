@@ -21,8 +21,11 @@ export const apiRequest = async (
     "Content-Type": "application/json",
   };
 
-  if (token) {
-    headers["x-auth-token"] = token;
+  // Get auth token from localStorage if not provided
+  const authToken = token || localStorage.getItem("token");
+  if (authToken) {
+    headers["x-auth-token"] = authToken;
+    console.log("Using auth token in request:", authToken);
   }
 
   const config: RequestInit = {

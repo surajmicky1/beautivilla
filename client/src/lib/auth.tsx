@@ -173,12 +173,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Login function
   const login = async (email: string, password: string) => {
-    await loginMutation.mutateAsync({ email, password });
+    try {
+      console.log("Submitting login request with email:", email);
+      const result = await loginMutation.mutateAsync({ email, password });
+      console.log("Login result:", result);
+      return result;
+    } catch (error) {
+      console.error("Login error in auth context:", error);
+      throw error;
+    }
   };
 
   // Register function
   const register = async (name: string, email: string, password: string) => {
-    await registerMutation.mutateAsync({ name, email, password });
+    try {
+      console.log("Submitting register request with email:", email);
+      const result = await registerMutation.mutateAsync({ name, email, password });
+      console.log("Register result:", result);
+      return result;
+    } catch (error) {
+      console.error("Register error in auth context:", error);
+      throw error;
+    }
   };
 
   // Logout function
