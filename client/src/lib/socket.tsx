@@ -33,8 +33,8 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         // Use a properly formed WebSocket URL
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const host = window.location.hostname;
-        const port = window.location.port || (protocol === 'wss:' ? '443' : '80');
-        const wsUrl = `${protocol}//${host}:${port}?token=${token}`;
+        const port = 5000; // Set the correct backend port directly
+        const wsUrl = `${protocol}//${host}:${port}/ws?token=${token}`;
         
         console.log("Attempting to connect WebSocket to:", wsUrl);
         const ws = new WebSocket(wsUrl);

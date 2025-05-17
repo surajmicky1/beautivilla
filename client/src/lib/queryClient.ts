@@ -39,14 +39,26 @@ export const apiRequest = async (
     console.log(`Request body: ${config.body}`);
   }
 
-  // API requests should go directly to the endpoints
-  const url = `${endpoint}`;
+  // Add server URL to ensure proper API endpoint resolution
+  const isAbsoluteUrl = endpoint.startsWith('http://') || endpoint.startsWith('https://');
+  const baseUrl = isAbsoluteUrl ? '' : 'http://localhost:5000'; // Set the correct backend URL
+  const url = isAbsoluteUrl ? endpoint : `${baseUrl}${endpoint}`;
+  
   console.log(`Making API request to: ${url} with method: ${method}`);
   console.log(`Request config:`, config);
 
   try {
     const response = await fetch(url, config);
     console.log(`Response status: ${response.status}`);
+    
+    // Try to parse the response as JSON for debugging
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const clonedResponse = response.clone();
+      const responseData = await clonedResponse.json();
+      console.log('Response data:', responseData);
+    }
+    
     return response;
   } catch (error) {
     console.error(`API request error for ${url}:`, error);
