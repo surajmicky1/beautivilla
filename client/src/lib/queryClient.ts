@@ -35,11 +35,9 @@ export const apiRequest = async (
     config.body = JSON.stringify(data);
   }
 
-  // Get the server URL from the current origin or use default
-  const serverUrl = import.meta.env.DEV 
-    ? "http://localhost:5000" 
-    : window.location.origin;
-
+  // Get the server URL from the current window location
+  const serverUrl = window.location.origin;
+  
   const url = `${serverUrl}${endpoint}`;
   console.log(`Making API request to: ${url}`);
 

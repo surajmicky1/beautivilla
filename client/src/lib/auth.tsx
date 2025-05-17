@@ -90,13 +90,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const loginMutation = useMutation({
     mutationFn: async (credentials: { email: string; password: string }) => {
       try {
+        console.log("Attempting login with:", credentials.email);
         const response = await apiRequest("POST", "/api/auth/login", credentials);
+        console.log("Login response status:", response.status);
+        
         if (!response.ok) {
-          const errorData = await response.json();
+          const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
+          console.error("Login error response:", errorData);
           throw new Error(errorData.message || "Invalid email or password");
         }
-        return response.json();
+        
+        const data = await response.json();
+        console.log("Login successful for:", credentials.email);
+        return data;
       } catch (error: any) {
+        console.error("Login error:", error);
         throw new Error(error.message || "Login failed. Please try again.");
       }
     },
@@ -124,8 +132,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Register mutation
   const registerMutation = useMutation({
     mutationFn: async (userData: { name: string; email: string; password: string }) => {
-      const response = await apiRequest("POST", "/api/auth/register", userData);
-      return response.json();
+      try {
+        console.log("Attempting registration for:", userData.email);
+        const response = await apiRequest("POST", "/api/auth/register", userData);
+        console.log("Register response status:", response.status);
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
+          console.error("Registration error response:", errorData);
+          throw new Error(errorData.message || "Registration failed");
+        }
+        
+        const data = await response.json();
+        console.log("Registration successful for:", userData.email);
+        return data;
+      } catch (error: any) {
+        console.error("Registration error:", error);
+        throw new Error(error.message || "Registration failed. Please try again.");
+      }
     },
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
