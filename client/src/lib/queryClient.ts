@@ -41,12 +41,8 @@ export const apiRequest = async (
 
   // Add server URL to ensure proper API endpoint resolution
   const isAbsoluteUrl = endpoint.startsWith('http://') || endpoint.startsWith('https://');
-  // Use relative path to the current domain
-  const baseUrl = isAbsoluteUrl ? '' : '/api'; 
-  // Make sure we handle both with and without leading slash
+  const baseUrl = isAbsoluteUrl ? '' : '/api'; // Use relative URL to current origin
   const url = isAbsoluteUrl ? endpoint : `${baseUrl}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
-  
-  console.log(`Making request to: ${url}`);
   
   console.log(`Making API request to: ${url} with method: ${method}`);
   console.log(`Request config:`, config);

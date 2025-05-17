@@ -28,21 +28,16 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     // Disable socket connections for now until issues are resolved
     const socketEnabled = false;
 
-    // Disable WebSocket connection completely for now to prevent errors
-    const socketEnabled = false;
-    
     if (socketEnabled && isAuthenticated && token) {
       try {
-        // We'll enable this later when websocket is properly set up
-        console.log("WebSocket connections are currently disabled");
-        /*
+        // Use a properly formed WebSocket URL that works in both development and production
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const host = window.location.hostname;
+        // In development, websocket might need explicit port, in production it will use same port
         const wsUrl = `${protocol}//${host}/ws?token=${token}`;
         
         console.log("Attempting to connect WebSocket to:", wsUrl);
         const ws = new WebSocket(wsUrl);
-        */
 
         ws.onopen = () => {
           console.log("WebSocket connected");
