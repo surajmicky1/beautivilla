@@ -30,11 +30,11 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (socketEnabled && isAuthenticated && token) {
       try {
-        // Use a properly formed WebSocket URL
+        // Use a properly formed WebSocket URL that works in both development and production
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const host = window.location.hostname;
-        const port = 5000; // Set the correct backend port directly
-        const wsUrl = `${protocol}//${host}:${port}/ws?token=${token}`;
+        // In development, websocket might need explicit port, in production it will use same port
+        const wsUrl = `${protocol}//${host}/ws?token=${token}`;
         
         console.log("Attempting to connect WebSocket to:", wsUrl);
         const ws = new WebSocket(wsUrl);
