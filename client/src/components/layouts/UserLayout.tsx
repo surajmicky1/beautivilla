@@ -180,7 +180,6 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
           </main>
         </div>
       </div>
-    </div>
     </SocketProvider>
   );
 };
