@@ -92,7 +92,8 @@ const UserLayout: React.FC<UserLayoutProps> = ({ children }) => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <SocketProvider>
+      <div className="min-h-screen flex flex-col">
         <header className="bg-white shadow-sm">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <Link href="/" className="flex items-center">
